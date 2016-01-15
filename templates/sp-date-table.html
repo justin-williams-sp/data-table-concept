@@ -1,0 +1,13 @@
+<table>
+    <tr>
+        <th ng-repeat="col in tableCtrl.cols">{{col.label}}</th>
+    </tr> 
+    <tr ng-repeat-start="item in tableCtrl.items" ng-click="tableCtrl.rowFunc({item:item})">
+        <td ng-repeat="col in tableCtrl.cols">{{item[col.prop]}}</th>
+    </tr>
+    <tr ng-if="tableCtrl.expanderFunc({item: item})" ng-repeat-end> 
+        <td colspan="{{tableCtrl.cols.length}}">
+            <ng-include src="tableCtrl.expanderTemplate"> 
+        </td> 
+    </tr>
+</table>
