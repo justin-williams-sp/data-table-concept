@@ -27,7 +27,8 @@ app.controller('PageCtrl', function(managePasswordDataService) {
             prop: 'bar'
         }, {
             label: 'third',
-            prop: 'baz'
+            prop: 'baz',
+            renderer: '<manage-password-btn item="item"></manage-password-btn>',
         }
     ];
     
@@ -70,8 +71,7 @@ app.directive('spDataTable', function() {
             cols: '=',
             items: '=',
             expanderTemplate: '@',
-            expanderFunc: '&',
-            rowFunc: '&'
+            expanderFunc: '&'
         }
     }
 });
@@ -91,6 +91,32 @@ app.directive('passwordExpander', function() {
             item: '='
         }
     }
+});
+
+app.directive('spDataTableCell', function($compile) {
+    return {
+        restrict: 'E',
+        template: '{{cellCtrl.item[cellCtrl.col.prop]}}',
+        controller: function() {
+        },
+        link: function(scope, element, attr) {
+            var newElement, newScope,
+                col = scope.cellCtrl.col,
+                item = scope.cellCtrl.item;
+            if(col.renderer) {
+                newScope = scope.$new();
+                newScope.item = item;
+                newElement = $compile(col.renderer)(newScope);
+                element.append(newElement);
+            }
+        },
+        controllerAs: 'cellCtrl',
+        bindToController: true,
+        scope: {
+            item: '=',
+            col: '='
+        }
+    };
 });
 
 app.directive('managePasswordBtn', function() {
